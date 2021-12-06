@@ -19,8 +19,8 @@ def window_sums(depths: Tuple[int, ...]) -> Tuple[int, ...]:
 
 def read_depths(file_name: str) -> Tuple[int, ...]:
     file = Path(__file__).parent / "static_files" / file_name
-    file_contexts = file.read_text()
-    return tuple([int(depth.strip()) for depth in file_contexts.split("\n")])
+    file_contents = file.read_text()
+    return tuple([int(depth.strip()) for depth in file_contents.split("\n")])
 
 
 if __name__ == "__main__":
