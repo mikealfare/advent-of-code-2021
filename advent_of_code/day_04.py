@@ -1,5 +1,6 @@
-from typing import List, Dict, Union
+from typing import List, Dict
 from pathlib import Path
+from copy import deepcopy
 
 
 Board = Dict[int, Dict[str, int]]
@@ -14,6 +15,16 @@ def winning_score(boards: List[Board], numbers: List[int]) -> int:
     return 0
 
 
+def losing_score(boards: List[Board], numbers: List[int]) -> int:
+    for number in numbers:
+        boards = mark_boards(boards, number)
+        for board in boards:
+            if board_wins(board):
+                boards.remove(board)
+            if not boards:
+                return score_board(board, number)
+
+
 def mark_boards(boards: List[Board], number: int) -> List[Board]:
     return [mark(board, number) for board in boards]
 
@@ -24,7 +35,7 @@ def mark(board: Board, number: int) -> Board:
     return board
 
 
-def winning_board(boards: List[Board]) -> Union[Board, None]:
+def winning_board(boards: List[Board]) -> Board:
     for board in boards:
         if board_wins(board):
             return board
@@ -109,4 +120,7 @@ def create_board(card: List[str]) -> Board:
 
 
 if __name__ == "__main__":
-    print(winning_score(read_boards("day_04.txt"), read_numbers("day_04.txt")))
+    puzzle_boards = read_boards("day_04.txt")
+    puzzle_numbers = read_numbers("day_04.txt")
+    print(winning_score(deepcopy(puzzle_boards), deepcopy(puzzle_numbers)))
+    print(losing_score(deepcopy(puzzle_boards), deepcopy(puzzle_numbers)))

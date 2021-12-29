@@ -38,3 +38,9 @@ def test_winning_score():
     boards = day_04.read_boards("day_04.txt", Path(__file__).parent / "static_files")
     numbers = day_04.read_numbers("day_04.txt", Path(__file__).parent / "static_files")
     assert day_04.winning_score(boards, numbers) == 4512
+
+
+def test_losing_score():
+    boards = day_04.read_boards("day_04.txt", Path(__file__).parent / "static_files")
+    numbers = day_04.read_numbers("day_04.txt", Path(__file__).parent / "static_files")
+    assert day_04.losing_score(boards, numbers) == 1924
