@@ -7,19 +7,21 @@ Point = namedtuple("Point", ["x", "y"])
 Vent = namedtuple("Vent", ["start", "end"])
 
 
-def overlapping_points(vents: List[Vent]) -> Set[Point]:
+def overlapping_points(vents: List[Vent], diagonal: bool = False) -> Set[Point]:
     all_points = []
     for vent in vents:
-        all_points.extend(cardinal_points(vent))
+        all_points.extend(vent_points(vent, diagonal))
     counter = Counter(all_points)
     return set(point for point in counter.elements() if counter[point] > 1)
 
 
-def cardinal_points(vent: Vent) -> List[Point]:
+def vent_points(vent: Vent, diagonal: bool = False) -> List[Point]:
     if is_horizontal(vent):
-        return [Point(x, vent.start.y) for x in ordered_range(vent.start.x, vent.end.x)]
+        return [Point(x, vent.start.y) for x in line(vent.start.x, vent.end.x)]
     elif is_vertical(vent):
-        return [Point(vent.start[0], y) for y in ordered_range(vent.start.y, vent.end.y)]
+        return [Point(vent.start[0], y) for y in line(vent.start.y, vent.end.y)]
+    elif diagonal:
+        return [Point(x, y) for x, y in zip(line(vent.start.x, vent.end.x), line(vent.start.y, vent.end.y))]
     else:
         return []
 
@@ -32,14 +34,12 @@ def is_vertical(vent: Vent) -> bool:
     return vent.start.x == vent.end.x
 
 
-def ordered_range(a: int, b: int):
+def line(a: int, b: int):
     if a >= b:
-        lower = b
-        upper = a
+        step = -1
     else:
-        lower = a
-        upper = b
-    return range(lower, upper + 1)
+        step = 1
+    return range(a, b + step, step)
 
 
 def read_vents(file_name: str) -> List[Vent]:
@@ -57,3 +57,4 @@ def parse_vent(vent: str) -> Vent:
 
 if __name__ == "__main__":
     print(len(overlapping_points(read_vents("day_05.txt"))))
+    print(len(overlapping_points(read_vents("day_05.txt"), True)))

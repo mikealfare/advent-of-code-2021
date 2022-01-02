@@ -36,3 +36,22 @@ def test_parse_vent(vent_string, expected_start, expected_end):
 def test_overlapping_points(vent_strings, expected_overlaps):
     vents = [day_05.parse_vent(vent) for vent in vent_strings]
     assert len(day_05.overlapping_points(vents)) == expected_overlaps
+
+
+@pytest.mark.parametrize("vent_strings,expected_overlaps", [
+    ([
+        "0,9 -> 5,9",
+        "8,0 -> 0,8",
+        "9,4 -> 3,4",
+        "2,2 -> 2,1",
+        "7,0 -> 7,4",
+        "6,4 -> 2,0",
+        "0,9 -> 2,9",
+        "3,4 -> 1,4",
+        "0,0 -> 8,8",
+        "5,5 -> 8,2"
+    ], 12)
+])
+def test_overlapping_points_diagonal(vent_strings, expected_overlaps):
+    vents = [day_05.parse_vent(vent) for vent in vent_strings]
+    assert len(day_05.overlapping_points(vents, True)) == expected_overlaps
